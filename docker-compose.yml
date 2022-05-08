@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  game-server:
+    build: ./grasscutter
+    ports:
+      - 22102:22102/udp
+      - 443:443
+    volumes:
+      - ./grasscutter:/app
+  game-proxy:
+    build: ./mitmproxy
+    ports:
+      - 8080:8080
+    volumes:
+      - ./mitmproxy:/app
+    links:
+      - game-server
+  game-db:
+    image: mongo:5.0.8
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db-data:/data/db
